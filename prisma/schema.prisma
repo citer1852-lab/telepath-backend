@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Character {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  
+  answers     CharacterAnswer[]
+}
+
+model Question {
+  id        Int      @id @default(autoincrement())
+  text      String   @unique
+  createdAt DateTime @default(now())
+  
+  answers   CharacterAnswer[]
+}
+
+model CharacterAnswer {
+  id          Int       @id @default(autoincrement())
+  characterId Int
+  questionId  Int
+  // weight will be between 0.0 and 1.0 (probability of answering Yes)
+  // e.g. 0.9 = Probably yes, 0.1 = Probably no, 0.5 = Don't know
+  weight      Float     @default(0.5)
+
+  character   Character @relation(fields: [characterId], references: [id])
+  question    Question  @relation(fields: [questionId], references: [id])
+
+  @@unique([characterId, questionId])
+}
+
+model Session {
+  id             String   @id @default(uuid())
+  state          String   // 'playing', 'guessed', 'finished'
+  step           Int      @default(0)
+  history        String   @default("[]") // [{ questionId, answerValue }]
+  probabilities  String   @default("{}") // { characterId: probability }
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
