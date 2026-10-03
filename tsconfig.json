@@ -7,5 +7,6 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "./dist"
-  }
+  },
+  "exclude": ["prisma.config.ts", "prisma/generate_1000.ts"]
 }

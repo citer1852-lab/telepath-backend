@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev src/index.ts",
-    "build": "prisma generate && npx ts-node prisma/generate_1000.ts && tsc",
+    "build": "prisma generate && npx prisma db push --accept-data-loss && npx ts-node prisma/generate_1000.ts && tsc",
     "start": "node dist/index.js",
     "seed": "ts-node prisma/generate_1000.ts"
   },
